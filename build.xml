@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Dropteam Drupal Project" default="help">
+    <!-- property-definitions are overridden in ascending order: local overrides global -->
+
+    <property file="phing/build.properties.local" />
+    <property file="phing/build.properties.project" />
+    <property file="phing/build.properties.global" />
+
+    <target name="help" description="Phing target list">
+        <exec executable="${phing.bin}"
+              passthru="true">
+            <arg value="-l"/>
+        </exec>
+    </target>
+
+    <includepath classpath="phing/src/Phing" />
+
+    <echo msg="Loading PHP Codesniffer Configuration task." />
+    <taskdef name="phpcodesnifferconfiguration" classname="\DrupalProject\Phing\PhpCodeSnifferConfigurationTask" />
+
+    <echo msg="Loading PHPUnit Configuration task." />
+    <taskdef name="phpunitconfiguration" classname="\DrupalProject\Phing\PhpUnitConfigurationTask" />
+
+    <import file="phing/tasks/deploy.xml"/>
+    <import file="phing/tasks/deploy/deploy-dev.xml"/>
+    <import file="phing/tasks/deploy/deploy-qa.xml"/>
+    <import file="phing/tasks/writable-settings.xml"/>
+    <import file="phing/tasks/install.xml"/>
+    <import file="phing/tasks/set-config-dir.xml"/>
+    <import file="phing/tasks/set-site-uuid.xml"/>
+    <import file="phing/tasks/setup-php-codesniffer.xml"/>
+    <import file="phing/tasks/setup-behat.xml"/>
+    <import file="phing/tasks/setup-phpunit.xml"/>
+    <import file="phing/tasks/link-docroot.xml"/>
+    <import file="phing/tasks/enable-dev-settings.xml"/>
+    <import file="phing/tasks/modules.xml"/>
+    <import file="phing/tasks/composer.xml"/>
+    <import file="./vendor/drupal/phingdrushtask/import.xml" />
+
+    <target
+        name="build-dev"
+        description="Build a development environment."
+        depends="install-composer-dependencies, setup-behat, setup-php-codesniffer, setup-phpunit" />
+
+    <target
+        name="setup-dev"
+        description="Set up 'development mode' for an installed website."
+        depends="enable-dev-settings, enable-dev-modules" />
+
+    <target
+        name="install-local"
+        description="Install the website and set up the local development environment."
+        depends="build-dev, install, setup-dev, set-config-dir, set-site-uuid" />
+    
+    <target
+        name="install-dev"
+        description="Install the website and set up the development environment."
+        depends="install, build-dev, set-config-dir, set-site-uuid" />
+
+    <target
+        name="install-qa"
+        description="Install the website and set up the qa environment."
+        depends="install, set-config-dir, set-site-uuid" />
+
+    <target
+        name="deploy-dev"
+        description="Deploy the website on the dev environment."
+        depends="install, set-config-dir, set-site-uuid" />
+
+</project>

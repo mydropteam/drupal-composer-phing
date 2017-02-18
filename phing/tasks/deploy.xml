@@ -1,0 +1,124 @@
+<project name="deploy" default="deploy">
+    <!-- Maintenace mode switch on. -->
+    <target name="stm-on">
+        <echo msg="Switch to maintenance mode........................." />
+        <drush
+                command="sset system.maintenance_mode 1"
+                assume="yes"
+                root="${website.drupal.dir}"
+                verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Clear cache. -->
+    <target name="clear-cache">
+        <echo msg="Clear cache drupal............................." />
+        <drush
+                command="cr"
+                assume="yes"
+                root="${website.drupal.dir}"
+                verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Create a database-dump for rollback. -->
+    <target name="dump-save-db">
+        <echo msg="create and save database-dump............................." />
+        <drush
+                command="sql-dump"
+                assume="yes"
+                root="${website.drupal.dir}"
+                verbose="${drush.verbose}">
+            <option name="result-file">${db.dump.path}/${db.dump.directory}/${db.dump.name}</option>
+        </drush>
+    </target>
+
+    <!-- Pulling out code from git. -->
+    <target name="git-pull">
+        <echo msg="Pulling out the latest code..........................." />
+        <exec command="git pull origin ${project.git.branch}"></exec>
+    </target>
+
+    <!-- Clean from git. -->
+    <target name="git-clean">
+        <echo msg="Clean from git...................................." />
+        <exec command="git clean -f"></exec>
+    </target>
+
+    <!-- Composer install. -->
+    <target name="composer-install">
+        <composer command="install" composer="${composer.bin}">
+            <arg value="--no-interaction" />
+        </composer>
+    </target>
+
+    <!-- Composer update. -->
+    <target name="composer-update">
+        <composer command="update" composer="${composer.bin}">
+            <arg value="--no-interaction" />
+        </composer>
+    </target>
+
+    <!-- Drush update configuration yml files. -->
+    <target name="cim-import">
+        <echo msg="Drush config import........................" />
+        <drush
+                command="cim sync"
+                assume="yes"
+                root="${website.drupal.dir}"
+                verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Drush update database. -->
+    <target name="drush-updb">
+        <echo msg="Drush update database........................" />
+        <drush
+                command="updb"
+                assume="yes"
+                root="${website.drupal.dir}"
+                verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Npm install. -->
+    <target name="npm-install">
+        <if>
+            <isset property="gulp.task" />
+                <then>
+                    <echo msg="Npm install..........................." />
+                    <exec command="npm install" dir="${website.drupal.dir}/themes/custom/{theme.name}/"></exec>
+                </then>
+        </if>
+    </target>
+
+    <!-- gulp build. -->
+    <target name="gulp-build">
+        <if>
+            <isset property="gulp.task" />
+                <then>
+                    <echo msg="Gulp build..........................." />
+                    <exec command="gulp {gulp.task}" dir="${website.drupal.dir}/themes/custom/{theme.name}/"></exec>
+                </then>
+        </if>
+    </target>
+
+    <!-- Maintenace mode switch off. -->
+    <target name="stm-off">
+        <echo msg="Switch off maintenance mode........................." />
+        <drush
+                command="sset system.maintenance_mode 0"
+                assume="yes"
+                root="${website.drupal.dir}"
+                verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Deploy to server. -->
+    <target
+            name="deploy"
+            description="Deployment from git to server."
+            depends="stm-on, clear-cache, dump-save-db, git-pull,composer-install, cim-import, drush-updb,
+            npm-install, gulp-build, stm-off, clear-cache" />
+
+</project>

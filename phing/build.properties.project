@@ -1,0 +1,51 @@
+# Drupal configuration
+# --------------------
+
+# The project name.
+project.name = mydrupalproject
+
+# The install profile to use.
+website.profile.name = standard
+
+# The site name.
+website.site.name = MyDrupalProject
+
+# Admin user.
+drupal.admin.username = admin
+drupal.admin.password = admin
+drupal.admin.email = admin@mydropteam.com
+
+# Comma-separated list of demo users to create. The username and password will
+# be taken from the role.
+drupal.demo.users = administrator
+
+# The base URL. This is used for doing functional tests in Behat and PHPUnit.
+drupal.base_url = http://localhost
+
+# Please comment out if you need to set the site uuid in case you work in a team and you didn't import an initial database.
+# website.uuid = xxx
+
+
+# Theme related
+# -------------------
+
+# Theme options, please uncomment if you use gulp for theme tasks
+# theme.name = mytheme
+# gulp.task = build
+
+
+# Modules options
+# -------------------
+
+# Development modules to enable on dev environment.
+drupal.modules.dev = config_update field_ui menu_ui views_ui
+
+# Development modules to uninstall on PROD environment.
+drupal.modules.noprod = config_update field_ui menu_ui views_ui devel
+
+
+# Drush
+# -------------------
+
+# Verbosity of Drush commands. Set to 'yes' for verbose output.
+drush.verbose = no

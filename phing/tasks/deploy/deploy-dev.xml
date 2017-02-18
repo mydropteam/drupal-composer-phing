@@ -1,0 +1,152 @@
+<project name="deploy-dev" default="deploy-dev">
+
+    <!-- Maintenace mode switch on. -->
+    <target name="stm">
+        <echo msg="Switch to maintenance mode........................." />
+        <drush
+            command="sset system.maintenance_mode 1"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Clear cache. -->
+    <target name="clear-cache">
+        <echo msg="Clear cache drupal............................." />
+        <drush
+            command="cr"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Deploy on development env. -->
+    <target name="dump-save-db">
+        <echo msg="Start backup database........................" />
+        <exec command="sh ${deploy.script.file}/deploy.sh dev" passthru="true" />
+        <echo msg="End backup database........................" />
+    </target>
+
+    <!-- Fetching out code from git. -->
+    <target name="git-fetch">
+        <echo msg="Fetching out the latest code" />
+        <exec command="git fetch origin qa"></exec>
+    </target>
+
+    <!-- Pulling out code from git. -->
+    <target name="git-pull">
+        <echo msg="Pulling out the latest code..........................." />
+        <exec command="git pull origin develop"></exec>
+    </target>
+
+    <!-- Clean from git. -->
+    <target name="git-clean">
+        <echo msg="Clean from git...................................." />
+        <exec command="git clean -f"></exec>
+    </target>
+
+    <!-- Delete drupal-devbox folder. -->
+    <!--target name="delete-devbox">
+        <echo msg="Deleting drupal-devebox folder........................" />
+        <delete dir="../drupal-devbox" includeemptydirs="true" failonerror="true" quiet='true' />
+    </target-->
+
+    <!-- Composer update. -->
+    <target name="composer-update">
+        <composer command="update" composer="${composer.bin}">
+            <arg value="--no-interaction" />
+        </composer>
+    </target>
+
+    <!-- Composer install. -->
+    <target name="composer-install">
+        <composer command="install" composer="${composer.bin}">
+            <arg value="--no-interaction" />
+        </composer>
+    </target>
+
+
+    <!-- Drush update configuration yml files. -->
+    <target name="cim-import">
+        <echo msg="Drush config import........................" />
+        <drush
+            command="cim sync"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Drush update database. -->
+    <target name="drush-updb">
+        <echo msg="Drush update database........................" />
+        <drush
+            command="updb"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Drush update entity fields. -->
+    <!--target name="drush-upentity">
+        <drush
+            command="entity-updates -y"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target-->
+
+    <!-- Maintenace mode switch off. -->
+    <target name="stm-last">
+        <echo msg="Switch to maintenance mode........................." />
+        <drush
+            command="sset system.maintenance_mode 0"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+  <!-- Npm install. -->
+    <target name="npm-install">
+        <echo msg="Npm install..........................." />
+        <exec command="npm install" dir="${website.drupal.dir}/themes/custom/bbr_theme/"></exec>
+    </target>
+
+   <!-- grunt build. -->
+    <target name="grunt-build">
+        <echo msg="Grunt build..........................." />
+        <exec command="grunt build" dir="${website.drupal.dir}/themes/custom/bbr_theme/"></exec>
+    </target>
+
+    <!-- Clear cache. -->
+    <target name="clear-cache-last">
+        <echo msg="Clear cache drupal..........................." />
+        <drush
+            command="cr"
+            assume="yes"
+            root="${website.drupal.dir}"
+            verbose="${drush.verbose}">
+        </drush>
+    </target>
+
+    <!-- Add passwor to htaccess default file drupal. -->
+    <target name="copy-httpaswd-dev">
+        <echo msg="Add htaccess-dev to default file .htacess drupal..................." />
+        <copy file="${deploy.script.file}/htaccess/htaccess-dev" tofile="${website.drupal.dir}/.htaccess" overwrite="true" />
+        <echo msg="Add htpaswd file to root directory drupal.........................." />
+        <copy file="${deploy.script.file}/htaccess/.htpasswd" tofile="${website.drupal.dir}/.htpasswd" overwrite="true" />
+    </target>
+
+    <!-- Deploy to dev. -->
+    <target
+        name="deploy-to-dev"
+        description="Deployement from git to dev."
+        depends="stm, clear-cache, dump-save-db, git-fetch, git-pull, git-clean, composer-update,
+        composer-install, cim-import, drush-updb, stm-last, clear-cache-last, copy-httpaswd-dev, npm-install, grunt-build " />
+
+</project>
