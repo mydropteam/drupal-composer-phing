@@ -51,10 +51,10 @@ install:
 
   # Start a web server on port 8888 in the background.
   - cd $TRAVIS_BUILD_DIR/htdocs
-  - nohup php -S localhost:8888 > /dev/null 2>&1 &
+  - nohup php -S localhost > /dev/null 2>&1 &
 
   # Wait until the web server is responding.
-  - until curl -s localhost:8888; do true; done > /dev/null
+  - until curl -s localhost; do true; done > /dev/null
   - cd $TRAVIS_BUILD_DIR
 
 script: ./scripts/travis-ci/run-test.sh ${TEST}
