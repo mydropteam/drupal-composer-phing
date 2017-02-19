@@ -15,6 +15,9 @@ drupal.admin.username = admin
 drupal.admin.password = admin
 drupal.admin.email = admin@example.com
 
+# The base URL to use in Behat tests.
+behat.base_url = ${drupal.base_url}
+
 # GIT branch for project to deploy
 # --------------------
 # project.git.branch = develop
