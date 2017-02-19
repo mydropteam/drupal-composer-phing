@@ -34,7 +34,7 @@ before_install:
   - composer --verbose self-update
 
   # Create database.
-  - mysql -e 'create database myproject'
+  - mysql -e 'create database mydrupalproject'
 
 install:
   # Install Composer dependencies.

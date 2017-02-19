@@ -7,7 +7,7 @@ case "$1" in
         exit $?
         ;;
     PHPUnit)
-        cd $TRAVIS_BUILD_DIR/web
+        cd $TRAVIS_BUILD_DIR/htdocs
         ../vendor/bin/phpunit
         exit $?
         ;;
