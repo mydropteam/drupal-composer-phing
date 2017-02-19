@@ -1,12 +1,16 @@
-# Composer template for Drupal projects
+# Composer/PHing template for Drupal projects
 [![Build Status](https://travis-ci.org/mydropteam/drupal-composer-phing.svg?branch=master)](https://travis-ci.org/mydropteam/drupal-composer-phing)
 
 This project template should provide a kickstart for managing your site
-dependencies with [Composer](https://getcomposer.org/).
+dependencies with [Composer](https://getcomposer.org/) and configurations and tasks with [PHing](https://www.phing.info/).
 
 If you want to know how to use it as replacement for
 [Drush Make](https://github.com/drush-ops/drush/blob/master/docs/make.md) visit
 the [Documentation on drupal.org](https://www.drupal.org/node/2471553).
+
+You'll get also [behat](http://behat.org/), [PHPUnit](https://phpunit.de/), 
+[PHP_CodeSniffer](https://www.squizlabs.com/php-codesniffer) with the Drupal project 
+[Coder](https://www.drupal.org/project/coder) as Quality Assurance tools for your development environments.
 
 ## Usage
 
@@ -25,9 +29,9 @@ cd some-dir
 
 ## Configuration
 
-Rename `example.build.properties.local` to `build.properties.local` under [root]/phing.
+Rename `phing/example.build.properties.local` to `phing/build.properties.local` under [root]/phing.
 
-This file will contain configuration which is unique to your development
+This file will contain configuration which is unique to your local/development
 machine. This is mainly useful for specifying your database credentials and the
 username and password of the Drupal admin user so they can be used during the
 installation.
@@ -35,8 +39,20 @@ installation.
 Because these settings are personal they should not be shared with the rest of
 the team. Make sure you never commit this file!
 
-All options you can use can be found in the `build.properties.dist` file. Just
-copy the lines you want to override and change their values.
+All options related to your project can be found in the `phing/build.properties.project` file. 
+
+Global options (in most cases you don't need to modify this file) can be found in the 
+`phing/build.properties.global` file.
+
+Just copy the lines you want to override and change their values.
+
+Please take knowledge of the following override-flow of settings:
+
+`phing/build.properties.local` overrides 
+
+`phing/build.properties.project` which overrides 
+
+`phing/build.properties.global`.
 
 ## Project installation
 
@@ -60,7 +76,7 @@ all files not excluded by the .gitignore file.
 
 When installing the given `composer.json` some tasks are taken care of:
 
-* Drupal will be installed in the `web`-directory.
+* Drupal will be installed in the `htdocs`-directory.
 * Autoloader is implemented to use the generated composer autoloader in `vendor/autoload.php`,
   instead of the one provided by Drupal (`web/vendor/autoload.php`).
 * Modules (packages of type `drupal-module`) will be placed in `web/modules/contrib/`
@@ -91,7 +107,8 @@ Follow the steps below to update your core files.
 1. In the event that there are non-trivial conflicts in step 2, you may wish 
    to perform these steps on a branch, and use `git merge` to combine the 
    updated core files with your customized files. This facilitates the use 
-   of a [three-way merge tool such as kdiff3](http://www.gitshah.com/2010/12/how-to-setup-kdiff-as-diff-tool-for-git.html). This setup is not necessary if your changes are simple; 
+   of a [three-way merge tool such as kdiff3](http://www.gitshah.com/2010/12/how-to-setup-kdiff-as-diff-tool-for-git.html). 
+   This setup is not necessary if your changes are simple; 
    keeping all of your modifications at the beginning or end of the file is a 
    good strategy to keep merges easy.
 
@@ -115,8 +132,14 @@ $ ./vendor/bin/phing install
 
 ## Set up tools for the development environment
 
-If you want to install a version suitable for development you can execute the
-`setup-dev` Phing target.
+You can set up a development environment quickly by executing `install-dev`:
+
+```
+$ ./vendor/bin/phing install-dev
+```
+This command perform both the `install` and `setup-dev` targets at once and you should be ready to code. 
+
+If you want to know more about the `setup-dev` Phing target:
 
 ```
 $ ./vendor/bin/phing setup-dev
@@ -135,13 +158,6 @@ This will perform the following tasks:
   * Enable access to `rebuild.php`.
 4. Enable development modules.
 5. Create a demo user for each user role.
-
-To set up a development environment quickly, you can perform both the `install`
-and `setup-dev` targets at once by executing `install-dev`:
-
-```
-$ ./vendor/bin/phing install-dev
-```
 
 
 ## Running Behat tests
@@ -254,8 +270,8 @@ is executed.
 ### Customize configuration
 
 The basic configuration can be changed by copying the relevant Phing properties
-from the "PHP CodeSniffer configuration" section in `build.properties.dist` to
-`build.properties` and changing them to your requirements. Then regenerate the
+from the "PHP CodeSniffer configuration" section in `build.properties.global` to
+`build.properties.project` and changing them to your requirements. Then regenerate the
 `phpcs.xml` file by running the `setup-php-codesniffer` target:
 
 ```
@@ -300,4 +316,5 @@ section of composer.json:
 
 ## Credits
 https://github.com/drupal-composer/drupal-project
+
 https://github.com/pfrenssen/drupal-project

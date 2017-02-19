@@ -56,12 +56,12 @@
     <target
         name="install-dev"
         description="Install the website and set up the development environment."
-        depends="install, build-dev, set-config-dir, set-site-uuid" />
+        depends="install-composer-dependencies, install, set-config-dir, set-site-uuid" />
 
     <target
         name="install-qa"
         description="Install the website and set up the qa environment."
-        depends="install, set-config-dir, set-site-uuid" />
+        depends="install-composer-dependencies, install, set-config-dir, set-site-uuid" />
 
     <target
         name="deploy-dev"
