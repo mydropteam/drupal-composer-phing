@@ -18,6 +18,9 @@ env:
   - TEST=Behat
 
 matrix:
+  - RELEASE=stable COMPOSER_CHANNEL=stable
+  - RELEASE=dev COMPOSER_CHANNEL=stable
+  - RELEASE=stable COMPOSER_CHANNEL=snapshot
   exclude:
     - php: 5.6
       env: TEST=PHP_CodeSniffer
@@ -31,7 +34,8 @@ before_install:
   - phpenv config-rm xdebug.ini || true
 
   # Update composer.
-  - composer --verbose self-update
+  - composer --verbose self-update --$COMPOSER_CHANNEL
+  - composer --version
 
   # Create database.
   - mysql -e 'create database mydrupalproject'
