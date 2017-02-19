@@ -41,7 +41,7 @@ install:
   - composer --verbose install
 
   # Define build properties for the local test environment.
-  - echo -e "drupal.base_url = http://localhost:8080\n" > build.properties.local
+  - echo -e "drupal.base_url = http://localhost\n" > build.properties.local
 
   # Build the project.
   # - ./vendor/bin/phing install-dev
@@ -51,10 +51,10 @@ install:
 
   # Start a web server on port 8080 in the background.
   - cd $TRAVIS_BUILD_DIR/htdocs
-  - nohup php -S localhost:8080 > /dev/null 2>&1 &
+  - nohup php -S localhost > /dev/null 2>&1 &
 
   # Wait until the web server is responding.
-  - until curl -s localhost:8080; do true; done > /dev/null
+  - until curl -s localhost; do true; done > /dev/null
   - cd $TRAVIS_BUILD_DIR
 
 script: ./scripts/travis-ci/run-test.sh ${TEST}
