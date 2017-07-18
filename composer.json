@@ -40,8 +40,6 @@
         "drupal/console": "~1.0",
         "drupal/core": "~8.1",
         "drupal/diff": "1.0.0-rc1",
-        "drupal/guardr": "1.x-dev",
-        "drupal/guardr_core": "1.x-dev",
         "drupal/login_history": "1.0.0",
         "drupal/login_security": "1.2.0",
         "drupal/mass_pwreset": "1.0.0-alpha4",
