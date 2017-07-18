@@ -2,7 +2,7 @@
 # --------------------
 
 # The project name.
-project.name = myproject
+project.name = drupal
 
 # The install profile to use.
 website.profile.name = standard
@@ -45,10 +45,21 @@ website.modules.dir = ${website.drupal.dir}/modules
 website.profiles.dir = ${website.drupal.dir}/profiles
 website.themes.dir = ${website.drupal.dir}/themes
 
-db.dump.path = ${project.basedir}
-db.dump.directory = dbdump-deploy
-db.dump.directory = drupal-deploy.sql
+db.dump.path = ${project.basedir}/db-dump
+db.dump.rollback.directory = ${db.dump.path}/dbdump-rollback
+db.dump.staging.directory = ${db.dump.path}/dbdump-staging
+db.dump.rollback.name = ${project.name}-rollback.sql
+db.dump.staging.name = ${project.name}-staging.sql
+db.dump.staging.name.compressed = ${db.dump.staging.name}.gz
 
+# Database import on deploy (TRUE or FALSE)
+# -------------------
+db.deploy.import = FALSE
+
+# Assets staging
+# -------------------
+assets.staging.source = ${project.basedir}/assets/files
+assets.staging.enable = FALSE
 
 # Behat configuration
 # -------------------
@@ -160,11 +171,11 @@ phpunit.db_url = ${drupal.db.url}
 # -------------------
 
 # Development modules to enable.
-drupal.modules.dev = config_update field_ui menu_ui views_ui
+drupal.modules.dev = field_ui menu_ui views_ui
 
 # PROD options
 # -------------------
-drupal.modules.noprod = config_update field_ui menu_ui views_ui devel
+drupal.modules.noprod = field_ui menu_ui views_ui devel
 
 # Verbosity of Drush commands. Set to 'yes' for verbose output.
 drush.verbose = no

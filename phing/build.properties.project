@@ -1,20 +1,22 @@
 # Drupal configuration
 # --------------------
 
-# The project name.
-project.name = mydrupalproject
+# The project name. (only lower case letters and underscores without spaces)
+project.name = drupal
 
 # The install profile to use.
 website.profile.name = standard
 
 # The site name.
-website.site.name = MyDrupalProject
+website.site.name = Drupal Project
 
 # Database settings.
 drupal.db.type = mysql
-drupal.db.name = mydrupalproject
+# following setting is for travis, please use something like ${project.name}
+drupal.db.name = drupal
+# following setting is for travis, please use something like ${project.name}_user
 drupal.db.user = root
-drupal.db.password =
+drupal.db.password = 
 drupal.db.host = localhost
 drupal.db.port = 3306
 drupal.db.url = ${drupal.db.type}://${drupal.db.user}:${drupal.db.password}@${drupal.db.host}:${drupal.db.port}/${drupal.db.name}
@@ -32,25 +34,28 @@ drupal.demo.users = administrator
 drupal.base_url = http://localhost
 
 # Please comment out if you need to set the site uuid in case you work in a team and you didn't import an initial database.
-# website.uuid = xxx
+# See core-bug https://www.drupal.org/node/2583113 for the necessity to set in this case also the shortcut.uuid
+# website.uuid = 
+# shortcut.uuid = 
 
 
 # Theme related
 # -------------------
 
-# Theme options, please uncomment if you use gulp for theme tasks
-# theme.name = mytheme
+# Theme options, please uncomment if you use npm and gulp or grunt for theme tasks
+theme.name = ${project.name}
+# npm.task = run setup
 # gulp.task = build
-
+# grunt.task = build
 
 # Modules options
 # -------------------
 
 # Development modules to enable on dev environment.
-drupal.modules.dev = config_update field_ui menu_ui views_ui
+drupal.modules.dev = devel webprofiler field_ui menu_ui views_ui
 
 # Development modules to uninstall on PROD environment.
-drupal.modules.noprod = config_update field_ui menu_ui views_ui devel
+drupal.modules.noprod = realistic_dummy_content views_ui devel
 
 
 # Drush
@@ -58,3 +63,13 @@ drupal.modules.noprod = config_update field_ui menu_ui views_ui devel
 
 # Verbosity of Drush commands. Set to 'yes' for verbose output.
 drush.verbose = no
+
+# DB-dump naming
+# -------------------
+db.dump.rollback.name = ${project.name}-rollback.sql
+db.dump.staging.name = ${project.name}-staging.sql
+db.dump.staging.name.compressed = ${db.dump.staging.name}.gz
+
+# Assets path
+# -------------------
+assets.staging.source = ${project.basedir}/assets/files
