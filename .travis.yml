@@ -9,7 +9,7 @@ sudo: false
 
 mysql:
   database: drupal
-  username: drupal_user
+  username: root
   encoding: utf8
 
 env:
