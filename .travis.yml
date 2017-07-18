@@ -8,8 +8,8 @@ php:
 sudo: false
 
 mysql:
-  database: myproject
-  username: root
+  database: drupal
+  username: drupal_user
   encoding: utf8
 
 env:
