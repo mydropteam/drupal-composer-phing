@@ -58,7 +58,7 @@
         name="install-local"
         description="Install the website and set up the local development environment."
         depends="build-dev, install, setup-dev, set-config-dir, set-site-uuid,set-shortcut-uuid" />
-    
+
     <target
         name="install-dev"
         description="Install the website and set up the development environment."
@@ -68,7 +68,7 @@
         name="install-qa"
         description="Install the website and set up the qa environment."
         depends="install-composer-dependencies, install, set-config-dir, set-site-uuid, set-shortcut-uuid" />
-    
+
     <target
         name="install-preprod"
         description="Install the website and set up the qa environment."
@@ -77,41 +77,41 @@
     <target
         name="deploy-local-post-codeupdate"
         description="Deployment tasks on the dev environment after the code-update."
-      depends="clear-cache, db-dump-save-rollback, install-composer-dependencies, db-dump-import, config-import, clear-cache, drush-updb, drush-entup, theme-update, assets_copy, clear-cache" />    
-    
+        depends="db-dump-save-rollback, install-composer-dependencies, db-dump-import, drush-updb, config-import, clear-cache, drush-entup, theme-update, assets_copy, clear-cache" />
+
     <target
         name="deploy-dev-pre-codeupdate"
         description="Prepare deployment on the dev environment before the code-update."
         depends="maintenance-mode-on, clear-cache, db-dump-save-rollback" />
-    
+
     <target
         name="deploy-dev-post-codeupdate"
         description="Deployment tasks on the dev environment after the code-update."
-        depends="install-composer-dependencies, db-dump-import, config-import, clear-cache, drush-updb, drush-entup, theme-update, assets_copy, clear-cache, maintenance-mode-off" />
+        depends="install-composer-dependencies, db-dump-import, drush-updb, config-import, clear-cache, drush-entup, theme-update, assets_copy, clear-cache, maintenance-mode-off" />
 
     <target
         name="deploy-preprod"
         description="Deployment tasks specific for the docker deployment that re-installs every time the whole site."
         depends="db-dump-import, config-import, clear-cache, uninstall-noprod-modules, drush-updb, drush-entup, theme-update, assets_copy, clear-cache" />
- 
+
     <target
         name="deploy-preprod-pre-codeupdate"
         description="Prepare deployment on the dev environment before the code-update."
         depends="maintenance-mode-on, clear-cache, db-dump-save-rollback" />
-    
+
     <target
         name="deploy-preprod-post-codeupdate"
         description="Deployment tasks on the dev environment after the code-update."
-        depends="install-composer-dependencies, db-dump-import, config-import, clear-cache, drush-updb, drush-entup, theme-update, assets_copy, clear-cache, maintenance-mode-off" />
+        depends="install-composer-dependencies, db-dump-import, drush-updb, config-import, clear-cache, drush-entup, theme-update, assets_copy, clear-cache, maintenance-mode-off" />
 
     <target
         name="deploy-prod-pre-codeupdate"
         description="Prepare deployment on the dev environment before the code-update."
         depends="maintenance-mode-on, clear-cache, db-dump-save-rollback" />
-    
+
     <target
         name="deploy-prod-post-codeupdate"
         description="Deployment tasks on the dev environment after the code-update."
-      depends="install-composer-dependencies, db-dump-import, config-import, clear-cache, drush-updb, drush-entup, theme-update, assets_copy, clear-cache, maintenance-mode-off" />
+      depends="install-composer-dependencies, db-dump-import, drush-updb, config-import, clear-cache, drush-entup, theme-update, assets_copy, clear-cache, maintenance-mode-off" />
 
 </project>
